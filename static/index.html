@@ -19,46 +19,21 @@
             日志信息：
             <pre>{{logInfo}}</pre>
         </div>
+        <ul>
+            <li v-for="item in logList"><pre>{{item}}</pre></li>
+        </ul>
     </div>
 </body>
 <script type="importmap">
 {
     "imports": {
         "vue": "https://cdn.jsdelivr.net/npm/vue@3.2.33/dist/vue.esm-browser.js",
-        "element": "https://cdn.jsdelivr.net/npm/element-plus@2.1.11/dist/index.full.min.mjs"
+        "element": "https://cdn.jsdelivr.net/npm/element-plus@2.1.11/dist/index.full.min.mjs",
+        "io": "https://cdn.jsdelivr.net/npm/socket.io@4.5.0/client-dist/socket.io.esm.min.js",
+        "deploy": "/js/deploy.js"
     }
 }
 </script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/vue@3.2.33/dist/vue.esm-browser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js"></script>
-<script type="module">
-    import { createApp } from 'vue'
-    import element from 'element'
-    const App = {
-        data() {
-            return {
-                logInfo: ''
-            }
-        },
-        methods: {
-            deploy() {
-                this.logInfo = '后端部署中，请稍等...'
-                axios.post('/deploy')
-                    .then((res) => {
-                        // 部署完成，返回 log
-                        console.log(res.data);
-                        this.logInfo = res.data.msg
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    })
-            }
-        }
-    }
-    const app = createApp(App)
-    app
-        .use(element)
-        .mount('#app')
-</script>
-
+<script type="module" src="./js/main.js"></script>
 </html>

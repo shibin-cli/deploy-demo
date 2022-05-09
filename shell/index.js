@@ -1,6 +1,6 @@
 const { spawn } = require('child_process');
 
-function runDeploy() {
+function runDeploy(socketIo) {
     let status = 0
     return new Promise((resolve, reject) => {
         if(status === 1) {
@@ -11,10 +11,13 @@ function runDeploy() {
             return
         }
         status = 1
+        // 执行对应的 shell 命令部署
+        // const child = spawn('sh', ['shell/deploy-a.sh']) 打包 page-a 部署
         const child = spawn('sh', ['shell/deploy.sh'])
         let msg = ''
         // shell 日志信息
         child.stdout.on('data', (data) => {
+            socketIo.emit('deploy-log', `${data}`)
             msg += data
             console.log(`stdout: ${data}`);
         })
@@ -29,6 +32,7 @@ function runDeploy() {
         // 如果发生错误，错误从这里输出
         child.stderr.on('data', (data) => {
             status = 0
+            socketIo.emit('deploy-log', `${data}`)
             console.error(`stderr: ${data}`)
             reject(new Error(data))
         })

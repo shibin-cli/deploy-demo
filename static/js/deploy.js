@@ -1,11 +1,12 @@
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import io from 'io'
 export default function useDeploy() {
     const logInfo = ref('')
     const socket = io()
-    const logList= reactive([])
+    const logList= ref([])
     function deploy() {
         logInfo.value = '后端部署中，请稍等...'
+        logList.value = []
         axios.post('/deploy')
             .then((res) => {
                 // 部署完成，返回 log
@@ -19,7 +20,7 @@ export default function useDeploy() {
 
   
     socket.on('deploy-log', (msg) => {
-        logList.push(msg)
+        logList.value.push(msg)
     })
     return {
         logInfo,
